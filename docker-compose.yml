@@ -1,0 +1,28 @@
+version: '2'
+services:
+  mongoose:
+    image: mongooseim/mongooseim
+    container_name: "monngoose"
+    hostname: "monngoose-1"
+    environment:
+      TZ: "Asia/Tokyo"
+    ports:
+      - '5222:5222' # client port
+      - '8088:8088' # admin API
+      - '8089:8089' # client API
+    depends_on:
+      - db
+    links:
+      - db
+    volumes:
+      - ./config:/member
+  db:
+    image: mysql:5.7
+    container_name: "monngoose-mysql"
+    environment:
+      TZ: "Asia/Tokyo"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '3306:3306'
+    volumes:
+        - "~/var/mysql/mongoose:/var/lib/mysql"
