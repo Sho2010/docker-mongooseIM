@@ -2,8 +2,8 @@ version: '2'
 services:
   mongoose:
     image: mongooseim/mongooseim
-    container_name: "monngoose"
-    hostname: "monngoose-1"
+    container_name: "mongoose"
+    hostname: "mongoose-1"
     environment:
       TZ: "Asia/Tokyo"
     ports:
@@ -19,10 +19,13 @@ services:
   db:
     image: mysql:5.7
     container_name: "monngoose-mysql"
+    command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
     environment:
       TZ: "Asia/Tokyo"
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: "mongoose"
     ports:
       - '3306:3306'
     volumes:
         - "~/var/mysql/mongoose:/var/lib/mysql"
+        - "./initdb:/docker-entrypoint-initdb.d"
